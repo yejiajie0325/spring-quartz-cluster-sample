@@ -111,9 +111,8 @@ public class ScheduleUtils {
     public static void runOnce(Scheduler scheduler, String jobName, String jobGroup) {
         JobKey jobKey = JobKey.jobKey(jobName, jobGroup);
         try {
-            log.info("runOnce start");
+            System.out.println("运行一次 start");
             scheduler.triggerJob(jobKey);
-            log.info("runOnce end");
         } catch (SchedulerException e) {
             log.error("运行一次定时任务失败", e);
             throw new ScheduleException("运行一次定时任务失败");
