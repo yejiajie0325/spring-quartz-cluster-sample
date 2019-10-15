@@ -17,10 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * author : fengjing
- * createTime : 2016-08-04
- * description : 定时任务服务实现
- * version : 1.0
+ * @author Damon
  */
 @Service
 public class ScheduleJobServiceImpl implements ScheduleJobService {
@@ -52,10 +49,10 @@ public class ScheduleJobServiceImpl implements ScheduleJobService {
         }
     }
 
-    public Long insert(ScheduleJobVo scheduleJobVo) {
+    public void insert(ScheduleJobVo scheduleJobVo) {
         ScheduleJob scheduleJob = scheduleJobVo.getTargetObject(ScheduleJob.class);
         ScheduleUtils.createScheduleJob(scheduler, scheduleJob);
-        return jdbcDao.insert(scheduleJob);
+        jdbcDao.insert(scheduleJob);
     }
 
     public void update(ScheduleJobVo scheduleJobVo) {
@@ -138,8 +135,7 @@ public class ScheduleJobServiceImpl implements ScheduleJobService {
     }
 
     /**
-     * 获取运行中的job列表
-     * @return
+     * @return 获取运行中的job列表
      */
     public List<ScheduleJobVo> queryExecutingJobList() {
         try {
@@ -172,9 +168,8 @@ public class ScheduleJobServiceImpl implements ScheduleJobService {
                 }
             }
 
-            /** 非集群环境获取正在执行的任务列表 */
-            /**
-            List<JobExecutionContext> executingJobs = scheduler.getCurrentlyExecutingJobs();
+            /* 非集群环境获取正在执行的任务列表 */
+            /*List<JobExecutionContext> executingJobs = scheduler.getCurrentlyExecutingJobs();
             List<ScheduleJobVo> jobList = new ArrayList<ScheduleJobVo>(executingJobs.size());
             for (JobExecutionContext executingJob : executingJobs) {
                 ScheduleJobVo job = new ScheduleJobVo();

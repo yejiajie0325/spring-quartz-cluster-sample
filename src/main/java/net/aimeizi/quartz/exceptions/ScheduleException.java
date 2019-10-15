@@ -3,11 +3,10 @@ package net.aimeizi.quartz.exceptions;
 import com.dexcoder.commons.exceptions.DexcoderException;
 
 /**
- * author : fengjing
- * createTime : 2016-08-04
- * description : 定时任务自定义异常
- * version : 1.0
- */
+ * 异常类
+ * @author Damon
+ * @date 2019-10-15
+ **/
 public class ScheduleException extends DexcoderException {
 
     /** serialVersionUID */

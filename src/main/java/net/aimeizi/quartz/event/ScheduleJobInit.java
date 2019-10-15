@@ -9,16 +9,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 /**
- * author : fengjing
- * createTime : 2016-08-04
- * description : 定时任务初始化
- * version : 1.0
- */
+ * 定时任务初始化
+ * @author Damon
+ * @date 2019-10-15
+ **/
 @Component
 public class ScheduleJobInit {
 
-    /** 日志对象 */
-    private static final Logger LOG = LoggerFactory.getLogger(ScheduleJobInit.class);
+    private static final Logger log = LoggerFactory.getLogger(ScheduleJobInit.class);
 
     /** 定时任务service */
     @Autowired
@@ -30,14 +28,14 @@ public class ScheduleJobInit {
     @PostConstruct
     public void init() {
 
-        if (LOG.isInfoEnabled()) {
-            LOG.info("init");
+        if (log.isInfoEnabled()) {
+            log.info("init");
         }
 
         scheduleJobService.initScheduleJob();
 
-        if (LOG.isInfoEnabled()) {
-            LOG.info("end");
+        if (log.isInfoEnabled()) {
+            log.info("end");
         }
     }
 

@@ -1,96 +1,84 @@
 package net.aimeizi.quartz.service;
 
-import java.util.List;
-
 import net.aimeizi.quartz.vo.ScheduleJobVo;
 
+import java.util.List;
+
 /**
- * author : fengjing
- * createTime : 2016-08-04
- * description : 定时任务服务
- * version : 1.0
- */
+ * 定时任务服务
+ * @author Damon
+ * @date 2019-10-15
+ **/
 public interface ScheduleJobService {
 
     /**
      * 初始化定时任务
      */
-    public void initScheduleJob();
+    void initScheduleJob();
 
     /**
      * 新增
-     * 
-     * @param scheduleJobVo
-     * @return
+     * @param scheduleJobVo 定时任务模型
      */
-    public Long insert(ScheduleJobVo scheduleJobVo);
+    void insert(ScheduleJobVo scheduleJobVo);
 
     /**
      * 直接修改 只能修改运行的时间，参数、同异步等无法修改
-     * 
-     * @param scheduleJobVo
+     * @param scheduleJobVo 定时任务模型
      */
-    public void update(ScheduleJobVo scheduleJobVo);
+    void update(ScheduleJobVo scheduleJobVo);
 
     /**
      * 删除重新创建方式
-     * 
-     * @param scheduleJobVo
+     * @param scheduleJobVo 定时任务模型
      */
-    public void delUpdate(ScheduleJobVo scheduleJobVo);
+    void delUpdate(ScheduleJobVo scheduleJobVo);
 
     /**
      * 删除
-     * 
-     * @param scheduleJobId
+     * @param scheduleJobId 任务id
      */
-    public void delete(Long scheduleJobId);
+    void delete(Long scheduleJobId);
 
     /**
      * 运行一次任务
      *
      * @param scheduleJobId the schedule job id
-     * @return
      */
-    public void runOnce(Long scheduleJobId);
+    void runOnce(Long scheduleJobId);
 
     /**
      * 暂停任务
      *
      * @param scheduleJobId the schedule job id
-     * @return
      */
-    public void pauseJob(Long scheduleJobId);
+    void pauseJob(Long scheduleJobId);
 
     /**
      * 恢复任务
      *
      * @param scheduleJobId the schedule job id
-     * @return
      */
-    public void resumeJob(Long scheduleJobId);
+    void resumeJob(Long scheduleJobId);
 
     /**
-     * 获取任务对象
-     * 
-     * @param scheduleJobId
-     * @return
+     * 获取单个任务
+     * @param scheduleJobId 任务id
+     * @return 获取任务对象
      */
-    public ScheduleJobVo get(Long scheduleJobId);
+    ScheduleJobVo get(Long scheduleJobId);
 
     /**
-     * 查询任务列表
-     * 
-     * @param scheduleJobVo
-     * @return
+     * 查询所有任务列表
+     * @param scheduleJobVo 任务VO
+     * @return 查询任务列表
      */
-    public List<ScheduleJobVo> queryList(ScheduleJobVo scheduleJobVo);
+    List<ScheduleJobVo> queryList(ScheduleJobVo scheduleJobVo);
 
     /**
      * 获取运行中的任务列表
-     *
-     * @return
+     * @return 运行中的任务类表
      */
-    public List<ScheduleJobVo> queryExecutingJobList();
+    List<ScheduleJobVo> queryExecutingJobList();
 
 }

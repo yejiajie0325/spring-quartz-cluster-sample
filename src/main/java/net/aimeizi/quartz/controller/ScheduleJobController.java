@@ -13,11 +13,10 @@ import net.aimeizi.quartz.service.ScheduleJobService;
 import net.aimeizi.quartz.vo.ScheduleJobVo;
 
 /**
- * author : fengjing
- * createTime : 2016-08-04
- * description : 定时任务控制器
- * version : 1.0
- */
+ * 定时任务control
+ * @author Damon
+ * @date 2019-10-15
+ **/
 @Controller
 public class ScheduleJobController {
 
@@ -27,8 +26,6 @@ public class ScheduleJobController {
 
     /**
      * 任务页面
-     *
-     * @return
      */
     @RequestMapping(value = "input-schedule-job", method = RequestMethod.GET)
     public String inputScheduleJob(ScheduleJobVo scheduleJobVo, ModelMap modelMap) {
@@ -44,8 +41,6 @@ public class ScheduleJobController {
 
     /**
      * 删除任务
-     *
-     * @return
      */
     @RequestMapping(value = "delete-schedule-job", method = RequestMethod.GET)
     public String deleteScheduleJob(Long scheduleJobId) {
@@ -57,8 +52,6 @@ public class ScheduleJobController {
 
     /**
      * 运行一次
-     *
-     * @return
      */
     @RequestMapping(value = "run-once-schedule-job", method = RequestMethod.GET)
     public String runOnceScheduleJob(Long scheduleJobId) {
@@ -70,8 +63,6 @@ public class ScheduleJobController {
 
     /**
      * 暂停
-     *
-     * @return
      */
     @RequestMapping(value = "pause-schedule-job", method = RequestMethod.GET)
     public String pauseScheduleJob(Long scheduleJobId) {
@@ -81,8 +72,6 @@ public class ScheduleJobController {
 
     /**
      * 恢复
-     *
-     * @return
      */
     @RequestMapping(value = "resume-schedule-job", method = RequestMethod.GET)
     public String resumeScheduleJob(Long scheduleJobId) {
@@ -92,8 +81,6 @@ public class ScheduleJobController {
 
     /**
      * 保存任务
-     *
-     * @param scheduleJobVo
      * @return
      */
     @RequestMapping(value = "save-schedule-job", method = RequestMethod.POST)

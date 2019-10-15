@@ -10,15 +10,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * author : fengjing
- * createTime : 2016-08-04
- * description : 定时任务操作辅助类
- * version : 1.0
- */
+ * 定时任务操作辅助类
+ * @author Damon
+ * @date 2019-10-15
+ **/
 public class ScheduleUtils {
 
     /** 日志对象 */
-    private static final Logger LOG = LoggerFactory.getLogger(ScheduleUtils.class);
+    private static final Logger log = LoggerFactory.getLogger(ScheduleUtils.class);
 
     /**
      * 获取触发器key
@@ -46,7 +45,7 @@ public class ScheduleUtils {
             TriggerKey triggerKey = TriggerKey.triggerKey(jobName, jobGroup);
             return (CronTrigger) scheduler.getTrigger(triggerKey);
         } catch (SchedulerException e) {
-            LOG.error("获取定时任务CronTrigger出现异常", e);
+            log.error("获取定时任务CronTrigger出现异常", e);
             throw new ScheduleException("获取定时任务CronTrigger出现异常");
         }
     }
@@ -97,7 +96,7 @@ public class ScheduleUtils {
         try {
             scheduler.scheduleJob(jobDetail, trigger);
         } catch (SchedulerException e) {
-            LOG.error("创建定时任务失败", e);
+            log.error("创建定时任务失败", e);
             throw new ScheduleException("创建定时任务失败");
         }
     }
@@ -114,7 +113,7 @@ public class ScheduleUtils {
         try {
             scheduler.triggerJob(jobKey);
         } catch (SchedulerException e) {
-            LOG.error("运行一次定时任务失败", e);
+            log.error("运行一次定时任务失败", e);
             throw new ScheduleException("运行一次定时任务失败");
         }
     }
@@ -132,7 +131,7 @@ public class ScheduleUtils {
         try {
             scheduler.pauseJob(jobKey);
         } catch (SchedulerException e) {
-            LOG.error("暂停定时任务失败", e);
+            log.error("暂停定时任务失败", e);
             throw new ScheduleException("暂停定时任务失败");
         }
     }
@@ -150,7 +149,7 @@ public class ScheduleUtils {
         try {
             scheduler.resumeJob(jobKey);
         } catch (SchedulerException e) {
-            LOG.error("暂停定时任务失败", e);
+            log.error("暂停定时任务失败", e);
             throw new ScheduleException("暂停定时任务失败");
         }
     }
@@ -220,7 +219,7 @@ public class ScheduleUtils {
                 scheduler.rescheduleJob(triggerKey, trigger);
             }
         } catch (SchedulerException e) {
-            LOG.error("更新定时任务失败", e);
+            log.error("更新定时任务失败", e);
             throw new ScheduleException("更新定时任务失败");
         }
     }
@@ -236,7 +235,7 @@ public class ScheduleUtils {
         try {
             scheduler.deleteJob(getJobKey(jobName, jobGroup));
         } catch (SchedulerException e) {
-            LOG.error("删除定时任务失败", e);
+            log.error("删除定时任务失败", e);
             throw new ScheduleException("删除定时任务失败");
         }
     }
