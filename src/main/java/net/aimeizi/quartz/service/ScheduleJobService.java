@@ -36,9 +36,9 @@ public interface ScheduleJobService {
 
     /**
      * 删除
-     * @param scheduleJobId 任务id
+     * @param scheduleJobVo 定时任务模型
      */
-    void delete(Long scheduleJobId);
+    void delete(ScheduleJobVo scheduleJobVo);
 
     /**
      * 运行一次任务

@@ -11,10 +11,12 @@ import org.apache.commons.collections.CollectionUtils;
 import org.quartz.*;
 import org.quartz.impl.matchers.GroupMatcher;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.expression.Expression;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author Damon
@@ -31,7 +33,7 @@ public class ScheduleJobServiceImpl implements ScheduleJobService {
     private JdbcDao jdbcDao;
 
     public void initScheduleJob() {
-        List<ScheduleJob> scheduleJobList = jdbcDao.queryList(Criteria.select(ScheduleJob.class));
+        List<ScheduleJob> scheduleJobList = jdbcDao.queryList(Criteria.select(ScheduleJob.class).where("status",new Object[]{"1"}));
         if (CollectionUtils.isEmpty(scheduleJobList)) {
             return;
         }
@@ -71,12 +73,14 @@ public class ScheduleJobServiceImpl implements ScheduleJobService {
         jdbcDao.update(scheduleJob);
     }
 
-    public void delete(Long scheduleJobId) {
+    public void delete(ScheduleJobVo scheduleJobVo) {
+        Long scheduleJobId = scheduleJobVo.getScheduleJobId();
         ScheduleJob scheduleJob = jdbcDao.get(ScheduleJob.class, scheduleJobId);
         //删除运行的任务
         ScheduleUtils.deleteScheduleJob(scheduler, scheduleJob.getJobName(), scheduleJob.getJobGroup());
         //删除数据
-        jdbcDao.delete(ScheduleJob.class, scheduleJobId);
+        scheduleJob.setStatus("0");
+        jdbcDao.update(scheduleJob);
     }
 
     public void runOnce(Long scheduleJobId) {
@@ -102,9 +106,7 @@ public class ScheduleJobServiceImpl implements ScheduleJobService {
     }
 
     public List<ScheduleJobVo> queryList(ScheduleJobVo scheduleJobVo) {
-
-        List<ScheduleJob> scheduleJobs = jdbcDao.queryList(scheduleJobVo.getTargetObject(ScheduleJob.class));
-
+        List<ScheduleJob> scheduleJobs = jdbcDao.queryList(Criteria.select(ScheduleJob.class).where("status",new Object[]{"1"}).desc("description"));
         List<ScheduleJobVo> scheduleJobVoList = BeanConverter.convert(ScheduleJobVo.class, scheduleJobs);
         try {
             for (ScheduleJobVo vo : scheduleJobVoList) {

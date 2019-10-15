@@ -18,8 +18,7 @@ public class AsyncJobFactory extends QuartzJobBean {
     private static final Logger log = LoggerFactory.getLogger(AsyncJobFactory.class);
     @Override
     protected void executeInternal(JobExecutionContext context) throws JobExecutionException {
-        log.info("AsyncJobFactory execute");
         ScheduleJob scheduleJob = (ScheduleJob) context.getMergedJobDataMap().get(ScheduleJobVo.JOB_PARAM_KEY);
-        log.info(scheduleJob.getJobName());
+        log.info("异步："+scheduleJob.getDescription());
     }
 }

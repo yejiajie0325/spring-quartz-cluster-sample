@@ -31,9 +31,8 @@ public class SyncJobFactory extends QuartzJobBean {
 
     @Override
     protected void executeInternal(JobExecutionContext context) throws JobExecutionException {
-        log.info("SyncJobFactory execute");
         ScheduleJob scheduleJob = (ScheduleJob) context.getMergedJobDataMap().get(ScheduleJobVo.JOB_PARAM_KEY);
-        log.info(scheduleJob.getJobName());
+        log.info("同步："+scheduleJob.getDescription());
 
         /*String url = scheduleJob.getUrl();
         CloseableHttpClient httpclient = HttpClients.createDefault();

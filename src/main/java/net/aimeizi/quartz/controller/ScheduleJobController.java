@@ -45,7 +45,7 @@ public class ScheduleJobController {
     @RequestMapping(value = "delete-schedule-job", method = RequestMethod.GET)
     public String deleteScheduleJob(Long scheduleJobId) {
 
-        scheduleJobService.delete(scheduleJobId);
+        scheduleJobService.delete(scheduleJobService.get(scheduleJobId));
 
         return "redirect:list-schedule-job.shtml";
     }
@@ -95,6 +95,7 @@ public class ScheduleJobController {
             //直接拿keywords存一下，就不另外重新弄了
             scheduleJobService.delUpdate(scheduleJobVo);
         }else {
+            // 此方法前端注释，暂时不使用
             scheduleJobService.update(scheduleJobVo);
         }
         return "redirect:list-schedule-job.shtml";

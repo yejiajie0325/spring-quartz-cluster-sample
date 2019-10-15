@@ -71,7 +71,7 @@ public class ScheduleUtils {
      * @param isSync the is sync
      * @param param the param
      */
-    public static void createScheduleJob(Scheduler scheduler, String jobName, String jobGroup,
+   public static void createScheduleJob(Scheduler scheduler, String jobName, String jobGroup,
                                          String cronExpression, boolean isSync, Object param) {
         //同步或异步
         Class<? extends Job> jobClass = isSync ? AsyncJobFactory.class : SyncJobFactory.class;
@@ -111,7 +111,9 @@ public class ScheduleUtils {
     public static void runOnce(Scheduler scheduler, String jobName, String jobGroup) {
         JobKey jobKey = JobKey.jobKey(jobName, jobGroup);
         try {
+            log.info("runOnce start");
             scheduler.triggerJob(jobKey);
+            log.info("runOnce end");
         } catch (SchedulerException e) {
             log.error("运行一次定时任务失败", e);
             throw new ScheduleException("运行一次定时任务失败");
