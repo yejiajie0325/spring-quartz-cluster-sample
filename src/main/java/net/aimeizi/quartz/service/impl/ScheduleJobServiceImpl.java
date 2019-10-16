@@ -11,12 +11,10 @@ import org.apache.commons.collections.CollectionUtils;
 import org.quartz.*;
 import org.quartz.impl.matchers.GroupMatcher;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.expression.Expression;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * @author Damon
@@ -32,6 +30,7 @@ public class ScheduleJobServiceImpl implements ScheduleJobService {
     @Autowired
     private JdbcDao jdbcDao;
 
+    @Override
     public void initScheduleJob() {
         List<ScheduleJob> scheduleJobList = jdbcDao.queryList(Criteria.select(ScheduleJob.class).where("status",new Object[]{"1"}));
         if (CollectionUtils.isEmpty(scheduleJobList)) {
@@ -51,18 +50,21 @@ public class ScheduleJobServiceImpl implements ScheduleJobService {
         }
     }
 
+    @Override
     public void insert(ScheduleJobVo scheduleJobVo) {
         ScheduleJob scheduleJob = scheduleJobVo.getTargetObject(ScheduleJob.class);
         ScheduleUtils.createScheduleJob(scheduler, scheduleJob);
         jdbcDao.insert(scheduleJob);
     }
 
+    @Override
     public void update(ScheduleJobVo scheduleJobVo) {
         ScheduleJob scheduleJob = scheduleJobVo.getTargetObject(ScheduleJob.class);
         ScheduleUtils.updateScheduleJob(scheduler, scheduleJob);
         jdbcDao.update(scheduleJob);
     }
 
+    @Override
     public void delUpdate(ScheduleJobVo scheduleJobVo) {
         ScheduleJob scheduleJob = scheduleJobVo.getTargetObject(ScheduleJob.class);
         //先删除
@@ -73,6 +75,7 @@ public class ScheduleJobServiceImpl implements ScheduleJobService {
         jdbcDao.update(scheduleJob);
     }
 
+    @Override
     public void delete(ScheduleJobVo scheduleJobVo) {
         Long scheduleJobId = scheduleJobVo.getScheduleJobId();
         ScheduleJob scheduleJob = jdbcDao.get(ScheduleJob.class, scheduleJobId);
@@ -83,28 +86,33 @@ public class ScheduleJobServiceImpl implements ScheduleJobService {
         jdbcDao.update(scheduleJob);
     }
 
+    @Override
     public void runOnce(Long scheduleJobId) {
         ScheduleJob scheduleJob = jdbcDao.get(ScheduleJob.class, scheduleJobId);
         ScheduleUtils.runOnce(scheduler, scheduleJob.getJobName(), scheduleJob.getJobGroup());
     }
 
+    @Override
     public void pauseJob(Long scheduleJobId) {
         ScheduleJob scheduleJob = jdbcDao.get(ScheduleJob.class, scheduleJobId);
         ScheduleUtils.pauseJob(scheduler, scheduleJob.getJobName(), scheduleJob.getJobGroup());
         //演示数据库就不更新了
     }
 
+    @Override
     public void resumeJob(Long scheduleJobId) {
         ScheduleJob scheduleJob = jdbcDao.get(ScheduleJob.class, scheduleJobId);
         ScheduleUtils.resumeJob(scheduler, scheduleJob.getJobName(), scheduleJob.getJobGroup());
         //演示数据库就不更新了
     }
 
+    @Override
     public ScheduleJobVo get(Long scheduleJobId) {
         ScheduleJob scheduleJob = jdbcDao.get(ScheduleJob.class, scheduleJobId);
         return scheduleJob.getTargetObject(ScheduleJobVo.class);
     }
 
+    @Override
     public List<ScheduleJobVo> queryList(ScheduleJobVo scheduleJobVo) {
         List<ScheduleJob> scheduleJobs = jdbcDao.queryList(Criteria.select(ScheduleJob.class).where("status",new Object[]{"1"}).desc("description"));
         List<ScheduleJobVo> scheduleJobVoList = BeanConverter.convert(ScheduleJobVo.class, scheduleJobs);
@@ -139,6 +147,7 @@ public class ScheduleJobServiceImpl implements ScheduleJobService {
     /**
      * @return 获取运行中的job列表
      */
+    @Override
     public List<ScheduleJobVo> queryExecutingJobList() {
         try {
             // 存放结果集
@@ -147,7 +156,7 @@ public class ScheduleJobServiceImpl implements ScheduleJobService {
             // 获取scheduler中的JobGroupName
             for (String group:scheduler.getJobGroupNames()){
                 // 获取JobKey 循环遍历JobKey
-                for(JobKey jobKey:scheduler.getJobKeys(GroupMatcher.<JobKey>groupEquals(group))){
+                for(JobKey jobKey:scheduler.getJobKeys(GroupMatcher.groupEquals(group))){
                     JobDetail jobDetail = scheduler.getJobDetail(jobKey);
                     JobDataMap jobDataMap = jobDetail.getJobDataMap();
                     ScheduleJob scheduleJob = (ScheduleJob)jobDataMap.get(ScheduleJobVo.JOB_PARAM_KEY);
