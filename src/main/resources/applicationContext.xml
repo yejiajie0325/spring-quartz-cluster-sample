@@ -70,11 +70,12 @@
                 <prop key="org.quartz.jobStore.class">org.quartz.impl.jdbcjobstore.JobStoreTX</prop>
 
                 <!-- 集群配置 -->
-                <prop key="org.quartz.jobStore.isClustered">true</prop>
-                <prop key="org.quartz.jobStore.clusterCheckinInterval">15000</prop>
-                <prop key="org.quartz.jobStore.maxMisfiresToHandleAtATime">1</prop>
+<!--                <prop key="org.quartz.jobStore.isClustered">true</prop>-->
+<!--                <prop key="org.quartz.jobStore.clusterCheckinInterval">15000</prop>-->
 
-                <prop key="org.quartz.jobStore.misfireThreshold">120000</prop>
+<!--                misfired 使用默认配置-->
+<!--                <prop key="org.quartz.jobStore.maxMisfiresToHandleAtATime">1</prop>-->
+<!--                <prop key="org.quartz.jobStore.misfireThreshold">600000</prop>-->
 
                 <prop key="org.quartz.jobStore.tablePrefix">QRTZ_</prop>
             </props>
@@ -83,7 +84,7 @@
         <property name="schedulerName" value="ClusterScheduler" />
 
         <!--必须的，QuartzScheduler 延时启动，应用启动完后 QuartzScheduler 再启动 -->
-        <property name="startupDelay" value="30" />
+        <property name="startupDelay" value="5" />
 
         <property name="applicationContextSchedulerContextKey" value="applicationContextKey" />
 
@@ -93,6 +94,7 @@
         <!-- 设置自动启动 -->
         <property name="autoStartup" value="true" />
 
-        <!--<property name="configLocation" value="classpath:quartz.properties" />-->
+<!--        不使用配置文件 -->
+<!--        <property name="configLocation" value="classpath:quartz.properties" />-->
     </bean>
 </beans>
