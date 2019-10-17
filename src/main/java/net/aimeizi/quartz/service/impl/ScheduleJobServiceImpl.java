@@ -43,9 +43,6 @@ public class ScheduleJobServiceImpl implements ScheduleJobService {
             //不存在，创建一个
             if (cronTrigger == null) {
                 ScheduleUtils.createScheduleJob(scheduler, scheduleJob);
-            } else {
-                //已存在，那么更新相应的定时设置
-                ScheduleUtils.updateScheduleJob(scheduler, scheduleJob);
             }
         }
     }
@@ -55,13 +52,6 @@ public class ScheduleJobServiceImpl implements ScheduleJobService {
         ScheduleJob scheduleJob = scheduleJobVo.getTargetObject(ScheduleJob.class);
         ScheduleUtils.createScheduleJob(scheduler, scheduleJob);
         jdbcDao.insert(scheduleJob);
-    }
-
-    @Override
-    public void update(ScheduleJobVo scheduleJobVo) {
-        ScheduleJob scheduleJob = scheduleJobVo.getTargetObject(ScheduleJob.class);
-        ScheduleUtils.updateScheduleJob(scheduler, scheduleJob);
-        jdbcDao.update(scheduleJob);
     }
 
     @Override

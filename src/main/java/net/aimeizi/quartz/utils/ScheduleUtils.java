@@ -73,21 +73,22 @@ public class ScheduleUtils {
      */
    public static void createScheduleJob(Scheduler scheduler, String jobName, String jobGroup,
                                          String cronExpression, boolean isSync, Object param) {
-        //同步或异步
+       ScheduleJob scheduleJob = (ScheduleJob)param;
+
+       //同步或异步
         Class<? extends Job> jobClass = isSync ? AsyncJobFactory.class : SyncJobFactory.class;
 
         //构建job信息
         JobDetail jobDetail = JobBuilder.newJob(jobClass).withIdentity(jobName, jobGroup).build();
 
-        //表达式调度构建器
-        CronScheduleBuilder scheduleBuilder = CronScheduleBuilder.cronSchedule(cronExpression);
-
         //按新的cronExpression表达式构建一个新的trigger
-        CronTrigger trigger = TriggerBuilder.newTrigger().withIdentity(jobName, jobGroup).withSchedule(scheduleBuilder).build();
+       Trigger trigger = TriggerBuilder.newTrigger()
+               .withIdentity(jobName, jobGroup)
+               .withSchedule(CronScheduleBuilder.cronSchedule(cronExpression).withMisfireHandlingInstructionFireAndProceed())
+               .build();
 
         String jobTrigger = trigger.getKey().getName();
 
-        ScheduleJob scheduleJob = (ScheduleJob)param;
         scheduleJob.setJobTrigger(jobTrigger);
 
         //放入参数，运行时的方法可以获取
@@ -165,64 +166,6 @@ public class ScheduleUtils {
     public static JobKey getJobKey(String jobName, String jobGroup) {
 
         return JobKey.jobKey(jobName, jobGroup);
-    }
-
-    /**
-     * 更新定时任务
-     *
-     * @param scheduler the scheduler
-     * @param scheduleJob the schedule job
-     */
-    public static void updateScheduleJob(Scheduler scheduler, ScheduleJob scheduleJob) {
-        updateScheduleJob(scheduler, scheduleJob.getJobName(), scheduleJob.getJobGroup(),
-            scheduleJob.getCronExpression(), scheduleJob.getIsSync(), scheduleJob);
-    }
-
-    /**
-     * 更新定时任务
-     *
-     * @param scheduler the scheduler
-     * @param jobName the job name
-     * @param jobGroup the job group
-     * @param cronExpression the cron expression
-     * @param isSync the is sync
-     * @param param the param
-     */
-    public static void updateScheduleJob(Scheduler scheduler, String jobName, String jobGroup,
-                                         String cronExpression, boolean isSync, Object param) {
-
-        //同步或异步
-//        Class<? extends Job> jobClass = isSync ? AsyncJobFactory.class : SyncJobFactory.class;
-
-        try {
-//            JobDetail jobDetail = scheduler.getJobDetail(getJobKey(jobName, jobGroup));
-
-//            jobDetail = jobDetail.getJobBuilder().ofType(jobClass).build();
-
-            //更新参数 实际测试中发现无法更新
-//            JobDataMap jobDataMap = jobDetail.getJobDataMap();
-//            jobDataMap.put(ScheduleJobVo.JOB_PARAM_KEY, param);
-//            jobDetail.getJobBuilder().usingJobData(jobDataMap);
-
-            TriggerKey triggerKey = ScheduleUtils.getTriggerKey(jobName, jobGroup);
-
-            //表达式调度构建器
-            CronScheduleBuilder scheduleBuilder = CronScheduleBuilder.cronSchedule(cronExpression);
-
-            CronTrigger trigger = (CronTrigger) scheduler.getTrigger(triggerKey);
-
-            //按新的cronExpression表达式重新构建trigger
-            trigger = trigger.getTriggerBuilder().withIdentity(triggerKey).withSchedule(scheduleBuilder).build();
-            Trigger.TriggerState triggerState = scheduler.getTriggerState(trigger.getKey());
-            // 忽略状态为PAUSED的任务，解决集群环境中在其他机器设置定时任务为PAUSED状态后，集群环境启动另一台主机时定时任务全被唤醒的bug
-            if(!triggerState.name().equalsIgnoreCase("PAUSED")){
-                //按新的trigger重新设置job执行
-                scheduler.rescheduleJob(triggerKey, trigger);
-            }
-        } catch (SchedulerException e) {
-            log.error("更新定时任务失败", e);
-            throw new ScheduleException("更新定时任务失败");
-        }
     }
 
     /**

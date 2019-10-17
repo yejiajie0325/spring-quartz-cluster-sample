@@ -23,12 +23,6 @@ public interface ScheduleJobService {
     void insert(ScheduleJobVo scheduleJobVo);
 
     /**
-     * 直接修改 只能修改运行的时间，参数、同异步等无法修改
-     * @param scheduleJobVo 定时任务模型
-     */
-    void update(ScheduleJobVo scheduleJobVo);
-
-    /**
      * 删除重新创建方式
      * @param scheduleJobVo 定时任务模型
      */
