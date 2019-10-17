@@ -5,7 +5,7 @@ Spring整合Quartz基于数据库的分布式定时任务，可动态添加、�
 ## 创建quartz数据库
 
 1. 执行src/main/resources/scripts下的建表语句  
-(其中一条数据即可，idea中执行tables_cubrid.sql即可)
+(其中一条数据即可，IntelliJ IDEA 中执行 tables_cubrid.sql 即可)
 
 2. 执行src/main/resources/create-schema.sql语句
 
@@ -35,3 +35,19 @@ Spring整合Quartz基于数据库的分布式定时任务，可动态添加、�
 1. qrtz_cron_triggers
 2. qrtz_triggers
 3. qrtz_job_details
+```$xslt
+# 删除运行中分组为 A 的数据
+DELETE FROM qrtz_cron_triggers where TRIGGER_GROUP = 'A';
+DELETE FROM qrtz_triggers WHERE TRIGGER_GROUP = 'A';
+DELETE FROM qrtz_job_details where JOB_GROUP = 'A';
+update schedule_job set status = '0',is_sync = '1' where job_group = 'A';
+```
+## 源码解读
+```$xslt
+启动：
+org.quartz.core.QuartzScheduler#start
+	org.quartz.impl.jdbcjobstore.JobStoreSupport#schedulerStarted
+执行：
+org.springframework.scheduling.quartz.QuartzJobBean
+	org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean.MethodInvokingJob#executeInternal
+```
